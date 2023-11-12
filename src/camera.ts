@@ -1,10 +1,12 @@
 import { mat4 } from 'gl-matrix';
 
 export interface Camera {
+  cameraPosition: [number, number, number];
   projectionMatrix: mat4;
   projectionMatrixLocation: WebGLUniformLocation;
   viewMatrix: mat4;
   modelViewMatrixLocation: WebGLUniformLocation;
+  normalMatrixLocation: WebGLUniformLocation;
   rotate(value: number): void;
 }
 
@@ -19,16 +21,19 @@ export function createCamera(
 
   const projectionMatrixLocation = gl.getUniformLocation(shaderProgram, 'projectionMatrix');
   const modelViewMatrixLocation = gl.getUniformLocation(shaderProgram, 'modelViewMatrix');
+  const normalMatrixLocation = gl.getUniformLocation(shaderProgram, 'normalMatrix');
 
-  if (projectionMatrixLocation === null || modelViewMatrixLocation === null) {
-    throw new Error('Cannot locate projection or model view matrices in shader');
+  if (projectionMatrixLocation === null || modelViewMatrixLocation === null || normalMatrixLocation === null) {
+    throw new Error('Cannot locate uniform matrices in shader');
   }
 
   return {
+    cameraPosition,
     projectionMatrix,
     projectionMatrixLocation,
     viewMatrix,
     modelViewMatrixLocation,
+    normalMatrixLocation,
     rotate: value => {
       mat4.identity(viewMatrix);
       mat4.translate(viewMatrix, viewMatrix, cameraPosition);
