@@ -1,7 +1,7 @@
 {
   "name": "deovr_test_case",
   "version": "1.0.0",
-  "description": "DeoVR test case using WebGL",
+  "description": "WebGL test case",
   "private": true,
   "scripts": {
     "build": "node ./build.js",
