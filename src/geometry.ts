@@ -56,7 +56,7 @@ export function createGeometry(
   mat4.rotateX(modelMatrix, modelMatrix, geometryLocalRotation[0]);
   mat4.rotateY(modelMatrix, modelMatrix, geometryLocalRotation[1]);
   mat4.rotateZ(modelMatrix, modelMatrix, geometryLocalRotation[2]);
-  mat4.scale(modelMatrix, modelMatrix, [1.5, 1.5, 1.5]);
+  mat4.scale(modelMatrix, modelMatrix, [3.0, 3.0, 3.0]);
 
   const textureSamplerLocation = gl.getUniformLocation(shaderProgram, 'textureSampler');
 
@@ -180,12 +180,18 @@ function writeTextCanvas(
   const fontSize = 24;
 
   ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  ctx.font = `${fontSize}px serif`;
+  ctx.font = `bold ${fontSize}px serif`;
 
-  const words = wrapText(ctx, text, 0, fontSize, ctx.canvas.width, fontSize);
+  const words = wrapText(ctx, text, 0, 0, ctx.canvas.width, fontSize);
 
-  words.forEach(([word, x, y]) => {
-    ctx.fillText(word, x, y);
+  words.forEach(([word, left, top, right, bottom]) => {
+    if (highlight && highlight[0] >= left && highlight[0] <= right && highlight[1] >= top && highlight[1] <= bottom) {
+      ctx.fillStyle = 'red';
+    } else {
+      ctx.fillStyle = 'black';
+    }
+
+    ctx.fillText(word, left, top + fontSize);
   });
 
   const texture = loadTextureFromCanvas(gl, ctx.canvas);

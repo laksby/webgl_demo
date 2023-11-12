@@ -88,33 +88,28 @@ export function isPowerOf2(value: number) {
 export function wrapText(
   ctx: CanvasRenderingContext2D,
   text: string,
-  x: number,
-  y: number,
+  textX: number,
+  textY: number,
   maxWidth: number,
   lineHeight: number,
-): [string, number, number][] {
+): [string, number, number, number, number][] {
   const words = text.split(' ');
-  const wordsWithPositions: [string, number, number][] = [];
+  const wordsWithPositions: [string, number, number, number, number][] = [];
 
-  let line = '';
-  let test = '';
+  let x = textX;
+  let y = textY;
 
-  words.forEach((word, i, array) => {
-    test += `${word} `;
-    const testWidth = ctx.measureText(test).width;
-    const wordWidth = ctx.measureText(word).width;
+  words.forEach(word => {
+    const metrics = ctx.measureText(`${word} `);
+    const nextWidth = metrics.width + x;
 
-    if (i > 0 && testWidth > maxWidth) {
-      wordsWithPositions.push([line, x, y]);
-      y += lineHeight;
-      line = `${word} `;
-      test = `${word} `;
+    if (nextWidth <= maxWidth) {
+      wordsWithPositions.push([word, x, y, nextWidth, y + lineHeight]);
+      x = nextWidth;
     } else {
-      line += `${word} `;
-    }
-
-    if (i === array.length - 1) {
-      wordsWithPositions.push([line, x, y]);
+      x = metrics.width;
+      y += lineHeight;
+      wordsWithPositions.push([word, 0, y, metrics.width, y + lineHeight]);
     }
   });
 
