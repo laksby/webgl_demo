@@ -1,0 +1,22 @@
+{
+  "name": "deovr_test_case",
+  "version": "1.0.0",
+  "description": "DeoVR test case using WebGL",
+  "private": true,
+  "scripts": {
+    "build": "node ./build.js",
+    "start": "npm run build && http-server . -p 3000 -c-1",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "gl-matrix": "^3.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.3.3",
+    "esbuild": "^0.19.5",
+    "http-server": "^14.1.1",
+    "prettier": "^3.0.3",
+    "typescript": "^5.1.6"
+  }
+}
